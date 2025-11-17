@@ -169,22 +169,69 @@
 
 import mongoose from "mongoose";
 
-// establish connection
+//establish connection
+const connectionString = "mongodb+srv://<username>:<db_password>@cluster0.wwsbvm7.mongodb.net/labDB";
+
+mongoose.connect(connectionString)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error("Connection failed:", err));
 
 
 // define schema
+const studentSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  major: String
+});
+
+const Student = mongoose.model("Student", studentSchema);
 
 
 // create document
+async function createStudents() {
+  try {
+    await Student.insertMany([
+      { name: "Ali", age: 21, major: "CS" },
+      { name: "Sara", age: 23, major: "SE" }
+    ]);
+    console.log("✅ Inserted");
+  } catch (err) {
+    console.error("Insert failed:", err);
+  }
+}
 
 
-// read document
+// read documents
+async function readStudents() {
+  try {
+    const all = await Student.find();
+    console.log(all);
+  } catch (err) {
+    console.error("Read failed:", err);
+  }
+}
 
 
 // update document
+async function updateStudent() {
+  try {
+    await Student.updateOne({ name: "Ali" }, { age: 22 });
+    console.log("✅ Updated Ali");
+  } catch (err) {
+    console.error("Update failed:", err);
+  }
+}
 
 
 // delete document
+async function deleteStudent() {
+  try {
+    await Student.deleteOne({ name: "Sara" });
+    console.log("✅ Deleted Sara");
+  } catch (err) {
+    console.error("Delete failed:", err);
+  }
+}
 
 
 
